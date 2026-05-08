@@ -1,0 +1,11 @@
+.git
+.env
+__pycache__/
+*.pyc
+frontend/.angular/
+frontend/.npm-cache/
+frontend/dist/
+frontend/node_modules/
+swe_team_result_issue_*.json
+code_review_report.json
+content_package.json

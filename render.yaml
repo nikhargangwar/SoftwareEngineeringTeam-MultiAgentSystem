@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ai-swe-team-console
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.9

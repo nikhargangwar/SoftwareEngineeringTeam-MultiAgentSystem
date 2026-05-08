@@ -1,0 +1,133 @@
+<main class="shell">
+  <section class="topbar">
+    <div>
+      <p class="eyebrow">Agentic engineering console</p>
+      <h1>AI Software Engineering Team</h1>
+    </div>
+    <div class="status-pill" [class.active]="runStatus === 'running'" [class.done]="runStatus === 'completed'" [class.failed]="runStatus === 'failed'">
+      <span></span>
+      {{ runStatus | titlecase }}
+    </div>
+  </section>
+
+  <section class="workspace">
+    <aside class="control-panel">
+      <div class="panel-heading">
+        <h2>Start Run</h2>
+        <p>Submit a GitHub issue and let the complete SWE agent pipeline take over.</p>
+      </div>
+
+      <form (ngSubmit)="start()" #runForm="ngForm" class="run-form">
+        <label>
+          Repository
+          <input
+            name="repo"
+            [(ngModel)]="repo"
+            placeholder="owner/repository"
+            autocomplete="off"
+            required>
+        </label>
+
+        <label>
+          Issue ID
+          <input
+            name="issueId"
+            [(ngModel)]="issueId"
+            type="number"
+            min="1"
+            placeholder="42"
+            required>
+        </label>
+
+        <button type="submit" [disabled]="runStatus === 'running' || runStatus === 'queued'">
+          <span class="button-mark"></span>
+          Launch agents
+        </button>
+      </form>
+
+      <div class="metric-grid">
+        <div>
+          <span>Progress</span>
+          <strong>{{ progressPercent }}%</strong>
+        </div>
+        <div>
+          <span>Stages</span>
+          <strong>{{ completedCount }}/{{ stages.length }}</strong>
+        </div>
+      </div>
+
+      <div class="progress-track">
+        <div [style.width.%]="progressPercent"></div>
+      </div>
+
+      <div class="current-stage" *ngIf="currentStage">
+        <span>Current agent</span>
+        <strong>{{ currentStage.name }}</strong>
+        <p>{{ currentStage.description }}</p>
+      </div>
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </aside>
+
+    <section class="main-panel">
+      <div class="timeline">
+        <article class="stage-row" *ngFor="let stage of stages" [class.running]="stage.status === 'running'" [class.completed]="stage.status === 'completed'" [class.failed]="stage.status === 'failed'">
+          <div class="stage-index">{{ stage.step }}</div>
+          <div class="stage-copy">
+            <div>
+              <h3>{{ stage.name }}</h3>
+              <span>{{ stage.status }}</span>
+            </div>
+            <p>{{ stage.description }}</p>
+          </div>
+        </article>
+      </div>
+
+      <aside class="inspector">
+        <section class="result-panel" *ngIf="result">
+          <div class="panel-title">
+            <h2>{{ result.success ? 'Pull Request Ready' : 'Run Failed' }}</h2>
+            <span *ngIf="result.elapsed_seconds">{{ result.elapsed_seconds }}s</span>
+          </div>
+
+          <a class="pr-link" *ngIf="result.pr?.pr_url" [href]="result.pr?.pr_url" target="_blank" rel="noreferrer">
+            {{ result.pr?.pr_title || 'Open pull request' }}
+          </a>
+
+          <div class="summary-list" *ngIf="result.analysis">
+            <div>
+              <span>Type</span>
+              <strong>{{ result.analysis.issue_type || 'n/a' }}</strong>
+            </div>
+            <div>
+              <span>Severity</span>
+              <strong>{{ result.analysis.severity || 'n/a' }}</strong>
+            </div>
+            <div>
+              <span>Complexity</span>
+              <strong>{{ result.analysis.complexity || 'n/a' }}</strong>
+            </div>
+          </div>
+
+          <p class="analysis" *ngIf="result.analysis?.summary">{{ result.analysis?.summary }}</p>
+
+          <div class="files" *ngIf="result.files_changed?.length">
+            <span>Files changed</span>
+            <code *ngFor="let file of result.files_changed">{{ file }}</code>
+          </div>
+        </section>
+
+        <section class="log-panel">
+          <div class="panel-title">
+            <h2>Live Log</h2>
+            <span>{{ logs.length }} entries</span>
+          </div>
+          <div class="log-stream">
+            <p *ngFor="let log of logs">{{ log }}</p>
+            <p class="muted" *ngIf="!logs.length">Waiting for agent output...</p>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </section>
+</main>
