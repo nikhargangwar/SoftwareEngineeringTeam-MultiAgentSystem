@@ -206,16 +206,16 @@ def run_events(run_id: str):
 
 
 if FRONTEND_DIST.exists():
+    assets_dir = FRONTEND_DIST / "assets"
+    if assets_dir.exists():
+        app.mount(
+            "/assets",
+            StaticFiles(directory=assets_dir),
+            name="frontend-assets",
+        )
+
     app.mount(
-        "/assets",
-        StaticFiles(directory=FRONTEND_DIST / "assets"),
-        name="frontend-assets",
+        "/",
+        StaticFiles(directory=FRONTEND_DIST, html=True),
+        name="frontend",
     )
-
-
-    @app.get("/{path:path}", include_in_schema=False)
-    def serve_frontend(path: str):
-        requested_file = FRONTEND_DIST / path
-        if path and requested_file.is_file():
-            return FileResponse(requested_file)
-        return FileResponse(FRONTEND_DIST / "index.html")
