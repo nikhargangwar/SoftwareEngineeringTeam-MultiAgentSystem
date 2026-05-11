@@ -16,6 +16,8 @@ This repository contains an automated Software Engineering team built as a colle
 - `requirements.txt` - Python dependencies.
 
 ## System Workflow
+<img width="918" height="696" alt="image" src="https://github.com/user-attachments/assets/2fa64a63-6ab0-4d62-b0d2-3c5504257c82" />
+<img width="859" height="329" alt="image" src="https://github.com/user-attachments/assets/27e75adb-a2b8-4eae-8e1f-a72dc991657d" />
 
 The pipeline is composed of 11 agents, each responsible for a distinct phase of the fix process:
 
@@ -62,6 +64,8 @@ The pipeline is composed of 11 agents, each responsible for a distinct phase of 
     - Adds a PR description, and comments on the original issue linking the PR.
 
 ## Technology Stack
+<img width="802" height="619" alt="image" src="https://github.com/user-attachments/assets/8d5d2796-279b-486f-b3a9-904077002be3" />
+<img width="938" height="264" alt="image" src="https://github.com/user-attachments/assets/ff26bd82-ca08-4a50-9d06-7399f685af61" />
 
 - Python
 - FastAPI for the backend API and event streaming
